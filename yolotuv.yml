@@ -1,5 +1,5 @@
-train: /content/yoloss/images/train/ 
-val: /content/yoloss/images/train/
+train: /content/yolotuv/images/train/ 
+val: /content/yolotuv/images/train/
 
 # number of classes
 nc: 6
