@@ -1,7 +1,0 @@
-train: /content/yoloss/images/train/ 
-val: /content/yoloss/images/train/
-
-# number of classes
-nc: 1
-# class names
-names: ['Logo']
