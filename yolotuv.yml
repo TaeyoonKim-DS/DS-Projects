@@ -1,7 +1,0 @@
-train: /content/yolotuv/images/train/ 
-val: /content/yolotuv/images/train/
-
-# number of classes
-nc: 6
-# class names
-names: ['Austria','Nord','Rheinland','Saarland','Sud','Thuringen']
