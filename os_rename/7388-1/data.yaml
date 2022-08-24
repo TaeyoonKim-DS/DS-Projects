@@ -1,0 +1,5 @@
+names:
+- '7388'
+nc: 1
+train: 7388-1/train/images
+val: 7388-1/valid/images
