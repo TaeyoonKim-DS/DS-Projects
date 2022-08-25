@@ -1,0 +1,5 @@
+names:
+- '1374'
+nc: 1
+train: 1374-1/train/images
+val: 1374-1/valid/images
