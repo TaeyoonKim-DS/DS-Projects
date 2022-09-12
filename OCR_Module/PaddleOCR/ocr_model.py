@@ -23,7 +23,7 @@ class CharacterModel():
         
         
     def define_model(self):
-        self.ocr_model = PaddleOCR(lang='en')
+        self.ocr_model = PaddleOCR(use_angle_cls=True, lang='en')
     
     def import_data(self):
         self.data = pd.read_csv("image_relevant_.csv", encoding='latin')
