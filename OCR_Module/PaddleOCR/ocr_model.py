@@ -27,13 +27,13 @@ class CharacterModel():
     
     def import_data(self):
         self.data = pd.read_csv("image_relevant_.csv", encoding='latin')
-        self.data = self.data[['image', 'relevant']]
+        self.data = self.data[['image', 'relevant']][:5]
 
     def get_words_and_scores_and_add_to_dataframe(self, row):
         photo = row["image"]
         if photo == "empty":
             return [[],[]]
-        self.image_path = "/home/studio-lab-user/DS-Projects/OCR/SWOOP_OCR_images/{}.jpg".format(photo)
+        self.image_path = "/home/studio-lab-user/DS-Projects/OCR/SWOOP_OCR_image_test/{}.jpg".format(photo)
         self.result = self.ocr_model.ocr(self.image_path)
         self.texts = [res[1][0] for res in self.result]
         self.scores = [res[1][1] *100 for res in self.result]
