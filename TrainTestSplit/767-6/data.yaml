@@ -1,0 +1,5 @@
+names:
+- '767'
+nc: 1
+train: 767-6/train/images
+val: 767-6/valid/images
