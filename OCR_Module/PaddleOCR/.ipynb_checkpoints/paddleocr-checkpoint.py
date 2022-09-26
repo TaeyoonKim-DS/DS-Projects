@@ -500,7 +500,7 @@ class PaddleOCR(predict_system.TextSystem):
         # init det_model and rec_model
         super().__init__(params)
 
-    def ocr(self, img, det=True, rec=True, cls=True):
+    def ocr(self, img, det=True, rec=True, cls=False):
         """
         ocr with paddleocr
         args：
