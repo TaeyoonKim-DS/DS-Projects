@@ -104,9 +104,7 @@ class CharacterModel():
     def get_ocr_score(self):
         self.data["OCR_score"] = self.data.apply(self.get_final_score, axis=1)
         
-        
     def get_roc_auc_score(self):
-        
         roc_auc_scores = roc_auc_score(self.data['relevant'], self.data['OCR_score'])
         self.roc_auc_score = roc_auc_scores
         print("roc_auc_score: ", self.roc_auc_score)

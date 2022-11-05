@@ -1,3 +1,5 @@
+## Import Libs
+
 from paddleocr import PaddleOCR, draw_ocr
 import pandas as pd
 import numpy as np
@@ -9,8 +11,7 @@ from sklearn.metrics import roc_auc_score
 
 
 class CharacterModel():
-
-    def __init__(self, targets):
+    def __init__(self, data, product_id, logger, targets):
         self.ocr_model = None
         self.data = None
         self.image_path = None
@@ -21,15 +22,43 @@ class CharacterModel():
         self.final_result = None
         self.targets = targets
         
-        
     def define_model(self):
         self.ocr_model = PaddleOCR(use_angle_cls=True, lang='en')
-    
-    def import_data(self):
-        self.data = pd.read_csv("image_relevant_.csv", encoding='latin')
-        self.data = self.data[['image', 'relevant']][:5]
+        
+    def create_temporary_directory(self):
+        self.tmp_dir = tempfile.mkdtemp()
+        os.mkdir(self.tmp_dir + "/images")
+        self.logger.info("Character recognition temporary directories created")
+        
+    def get_image_hashes(self):
+        data = self.data.copy()
+        data = data[data["image"].notna()]
+        data = data[~data["image"].isin(["empty"])]
 
-    def get_words_and_scores_and_add_to_dataframe(self, row):
+        hash_set = set(data["image"].tolist())
+
+        self.hash_lists["prediction_hashes"] = list(hash_set)
+        self.logger.info("Compiled image hash list for Character recognition")
+        
+    def get_next_image_batch(self):
+        self.hash_lists["prediction_hashes_batch"] = self.hash_lists["prediction_hashes"][:constants.OCR_BATCH_SIZE]
+        self.hash_lists["prediction_hashes"] = self.hash_lists["prediction_hashes"][constants.OCR_BATCH_SIZE:]
+        
+    def add_prediction_images_to_directories(self):
+        ai_functions.parallel_download_images_from_s3(
+                                self.hash_lists["prediction_hashes_batch"],
+                                (self.tmp_dir + "/images"))
+        
+    def check_prediction_directories_for_corrupt_images(self):
+        directories = [self.tmp_dir + "/images"]
+        ai_functions.delete_corrupt_images(directories, self.logger)
+        self.logger.info("OCR directories checked for corrupt image files.")
+
+
+    def check_the_prediction_directory_contains_images(self):
+        return len([name for name in os.listdir(self.tmp_dir+"/images")])
+        
+    def get_words_and_scores_and_add_to_dataframe(self, row): # To do this, need to make a dataframe and apply
         photo = row["image"]
         if photo == "empty":
             return [[],[]]
@@ -40,10 +69,18 @@ class CharacterModel():
         self.final_result = [self.texts, self.scores]
         
         return self.final_result
+    
+     
+    def get_prediction_results(self):
+        prediction_results_batch = pd.DataFrame() # At some point we need to make a dataframe
+        prediction_results_batch['image'] = self.hash_lists["prediction_hashes_batch"]
+        prediction_results_batch['OCR_score'] = prediction_results_batch.apply(self.score_extraction, axis=1)
 
+        self.prediction_results = pd.concat([self.prediction_results, prediction_results_batch])
+        
     def get_text_score(self):
         self.data["words"] = self.data.apply(self.get_words_and_scores_and_add_to_dataframe, axis=1)
-    
+        
     def new_score_text(self, row):
         sample_list = row["words"][0]
         score_list = row["words"][1]
@@ -60,8 +97,8 @@ class CharacterModel():
     
     def get_new_score_text(self):
         self.data["words"] = self.data.apply(self.new_score_text, axis=1)
-    
-    def clean_text(self, row):
+        
+        def clean_text(self, row):
         word_list = row["words"][0]
         new_word_list = []
         for word in word_list:
@@ -101,20 +138,26 @@ class CharacterModel():
 
         return max_score
     
+    def empty_prediction_folder(self):
+        dir = (self.tmp_dir + "/images")
+        for f in os.listdir(dir):
+            os.remove(os.path.join(dir, f))
+            
     def get_ocr_score(self):
         self.data["OCR_score"] = self.data.apply(self.get_final_score, axis=1)
         
     def get_roc_auc_score(self):
+        
         roc_auc_scores = roc_auc_score(self.data['relevant'], self.data['OCR_score'])
         self.roc_auc_score = roc_auc_scores
         print("roc_auc_score: ", self.roc_auc_score)
 
-    def predict(self):
-        self.define_model()
-        self.import_data()
-        self.get_text_score()
-        self.get_new_score_text()
-        self.get_clean_text()
-        self.get_ocr_score()
-        self.get_roc_auc_score()
-        return print(self.data)
+        
+
+        
+
+    
+    
+    
+    
+        
