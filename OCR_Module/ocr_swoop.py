@@ -151,13 +151,3 @@ class CharacterModel():
         roc_auc_scores = roc_auc_score(self.data['relevant'], self.data['OCR_score'])
         self.roc_auc_score = roc_auc_scores
         print("roc_auc_score: ", self.roc_auc_score)
-
-        
-
-        
-
-    
-    
-    
-    
-        
