@@ -1,5 +1,0 @@
-names:
-- '7387'
-nc: 1
-train: 7387-1/train/images
-val: 7387-1/valid/images
