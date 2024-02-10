@@ -29,4 +29,4 @@ To use the trained model for logo detection, follow the instructions provided in
 - NumPy
 
 ## Contact
-For any inquiries or feedback, please contact [Taeyoon Kim](taeyoon.kim.ds@gmail.com).
+For any inquiries or feedback, please contact (taeyoon.kim.ds@gmail.com).
