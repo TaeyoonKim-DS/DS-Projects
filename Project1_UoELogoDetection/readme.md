@@ -13,6 +13,9 @@ The YOLOv8 model was trained using the annotated dataset mentioned above. The tr
 
 ## Evaluation
 The trained model's performance was evaluated on a separate validation set to assess its ability to accurately detect the University of Edinburgh logo in unseen images. Evaluation metrics such as precision, recall, and mean Average Precision (mAP) were computed to measure the model's performance.
+!([image lin](https://github.com/ewankim1023/DS-Projects/blob/master/Project1_UoELogoDetection/Validation.jpg))
+
+
 
 ## Results
 The trained YOLOv8 model demonstrates robust performance in detecting the University of Edinburgh logo across a variety of images. Sample results and visualizations of the model's predictions are provided in the repository.
